@@ -545,8 +545,15 @@ void main() {
         part = d.y;
 
         // --- x-ray scaffolding ---------------------------------------------
-        float wire = lattice(p, 3.0, 0.016 + 0.010 * (1.0 - uPolish));
-        float slice = smoothstep(0.018, 0.0, abs(fract(p.y * uSlices) - 0.5) / uSlices);
+        // Spatial frequency scaled by zoom: the grid and slice lines are laid
+        // out in world units, so a tighter framing (as on a phone's narrower
+        // stage) magnifies the same handful of lines into widely separated
+        // bands that read as the car being drawn several times over. Scaling
+        // by zoom keeps the on-screen line density the same at any framing.
+        float scaffoldZoom = max(uZoom, 0.05);
+        float wire = lattice(p, 3.0 * scaffoldZoom, 0.016 + 0.010 * (1.0 - uPolish));
+        float sliceFreq = uSlices * scaffoldZoom;
+        float slice = smoothstep(0.018, 0.0, abs(fract(p.y * sliceFreq) - 0.5) / sliceFreq);
         float swd = (p.y - sweepY) * 13.0;
         float sweep = exp(-swd * swd);
         scaffold = (wire * 0.50 + slice * 0.80 + sweep * 1.40) * uWire * body;

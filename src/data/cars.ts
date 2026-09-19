@@ -677,6 +677,55 @@ const ROWS: Row[] = [
   ['DeLorean','DMC-12',1981,1983,'coupe','rwd',6,2.8,130,'manual',5,2,110,2,19,50000,5,'classic,icon,stainless'],
   ['Skoda','130 Rapid Coupe',1987,1990,'coupe','rwd',4,1.3,63,'manual',4,4,120,2,34,9000,3,'classic,budget,light'],
 
+  // --- more pickups, and every other thin category -------------------------
+  // Work-spec trucks: regular cab, RWD, bench seat. Almost every truck in the
+  // set so far is a loaded 4x4 crew cab; this is what most trucks sold
+  // actually are, and it is also where the 3-seat and sub-$25k pickup pool
+  // was coming from nowhere.
+  ['Ford','F-150 Regular Cab',2015,2020,'pickup','rwd',6,3.3,290,'auto',10,3,215,3,21,22000,1,'truck,work,cheap,rwd'],
+  ['Chevrolet','Silverado 1500 WT',2019,2024,'pickup','rwd',6,4.3,285,'auto',8,3,215,3,20,23000,1,'truck,work,cheap,rwd'],
+  ['Toyota','Tacoma SR',2016,2023,'pickup','rwd',4,2.7,159,'manual',6,4,220,5,21,19000,2,'truck,budget,rwd'],
+  ['Ford','Ranger XL',2019,2023,'pickup','rwd',4,2.3,270,'auto',10,5,215,3,22,24000,2,'truck,budget,rwd'],
+  ['Isuzu','D-Max 4x2',2017,2024,'pickup','rwd',4,3.0,187,'auto',6,5,215,4,27,22000,3,'truck,diesel,budget,rwd'],
+  // Classic and oddball small trucks, mostly forgotten but real, and mostly
+  // cheap — the pickup pool had nothing under $18k until these.
+  ['Datsun','720',1979,1986,'pickup','rwd',4,2.0,100,'manual',5,3,200,3,25,8000,2,'classic,budget,rwd'],
+  ['Chevrolet','S-10',1994,2004,'pickup','rwd',4,2.2,118,'manual',5,3,200,3,23,6000,1,'classic,budget,rwd'],
+  ['Ford','Courier',1972,1982,'pickup','rwd',4,1.8,74,'manual',4,3,190,2,26,9000,1,'classic,budget,rwd'],
+  ['Volkswagen','Rabbit Pickup',1979,1983,'pickup','fwd',4,1.7,76,'manual',4,2,180,3,30,9000,1,'classic,budget,fwd,rare'],
+  ['Subaru','Brat',1978,1987,'pickup','awd',4,1.8,73,'manual',4,4,210,2,26,12000,3,'cult,quirky,classic,awd'],
+  // Global trucks outside the usual US/JDM catalogue.
+  ['Great Wall','Wingle 5',2011,2020,'pickup','4x4',4,2.0,139,'manual',5,5,200,2,29,9000,2,'truck,diesel,budget,international'],
+  ['SsangYong','Musso',2018,2024,'pickup','4x4',4,2.2,181,'auto',6,5,205,3,26,24000,2,'truck,diesel,practical'],
+  ['Toyota','HiAce',2019,2024,'van','rwd',4,2.8,174,'auto',6,5,180,4,24,28000,2,'van,practical,diesel,international'],
+  // Electric pickups, both real production trucks.
+  ['Ford','F-150 Lightning',2022,2025,'pickup','awd',0,0,452,'single',1,5,215,3,68,55000,4,'ev,truck,fast,tech'],
+  ['Chevrolet','Silverado EV',2023,2025,'pickup','awd',0,0,754,'single',1,5,220,3,52,80000,4,'ev,truck,fast,tow,tech'],
+  // A couple more serious 4x4s, since drivetrain was leaning heavily on awd/fwd.
+  ['Toyota','4Runner TRD Pro',2020,2024,'suv','4x4',6,4.0,270,'auto',5,5,270,5,17,48000,4,'offroad,truck,tough'],
+  ['Ineos','Grenadier',2023,2025,'suv','4x4',6,3.0,282,'auto',8,5,264,3,20,75000,4,'offroad,tough,rugged'],
+
+  // Convertibles: the whole body style was down to 19 cars.
+  ['Chevrolet','Corvette C8 Convertible',2020,2024,'convertible','rwd',8,6.2,495,'dct',8,2,110,4,19,75000,5,'v8,fast,exotic,fun'],
+  ['Ford','Mustang GT Convertible',2018,2023,'convertible','rwd',8,5.0,460,'manual',6,4,120,4,18,38000,5,'v8,fast,fun'],
+  ['Mini','Cooper S Convertible',2016,2024,'convertible','fwd',4,2.0,189,'auto',7,4,130,4,29,24000,4,'stylish,sporty,fun'],
+  ['Volkswagen','Beetle Convertible',2013,2019,'convertible','fwd',4,1.8,170,'auto',6,4,135,3,29,15000,3,'stylish,fun,retro'],
+  ['Chrysler','200 Convertible',2011,2014,'convertible','fwd',6,3.6,283,'auto',6,4,130,2,23,9000,2,'cheap,cruiser'],
+  ['Fiat','500C',2012,2019,'convertible','fwd',4,1.4,101,'auto',6,4,140,3,31,9000,3,'small,fun,cheap'],
+  ['Land Rover','Range Rover Evoque Convertible',2016,2018,'convertible','awd',4,2.0,240,'auto',9,4,210,2,25,22000,3,'luxury,rare,offroad-capable'],
+  ['Audi','A5 Cabriolet',2018,2024,'convertible','awd',4,2.0,261,'auto',7,4,130,4,27,32000,4,'luxury,sporty,stylish'],
+
+  // Vans, including two 9-seat passenger vans — the 9-seat slot in the whole
+  // dataset had exactly one car in it.
+  ['Mercedes-Benz','Sprinter Passenger',2015,2024,'van','rwd',6,3.0,188,'auto',7,9,180,3,18,32000,2,'van,big,practical'],
+  ['Ford','Transit Passenger Wagon',2015,2024,'van','rwd',6,3.5,275,'auto',10,9,180,3,16,35000,3,'van,big,practical'],
+  ['Chevrolet','Express Passenger',2010,2024,'van','rwd',8,6.0,341,'auto',6,8,180,2,14,26000,1,'van,big,v8,practical'],
+  ['Nissan','NV200',2013,2021,'van','fwd',4,2.0,131,'cvt',1,5,160,3,25,12000,2,'van,small,cargo,practical'],
+  ['Fiat','Ducato',2014,2024,'van','fwd',4,2.3,140,'manual',6,5,180,3,28,18000,2,'van,cargo,diesel,practical'],
+  // 6-seat captain's-chair vans — the 6-seat slot was almost as thin as 9.
+  ['Honda','Odyssey Elite',2018,2024,'van','fwd',6,3.5,280,'auto',10,6,140,4,22,32000,3,'van,family,captain-chairs'],
+  ['Kia','Sedona',2015,2020,'van','fwd',6,3.3,276,'auto',6,6,150,3,22,17000,2,'van,family,captain-chairs'],
+
 ];
 
 const COLS = [
