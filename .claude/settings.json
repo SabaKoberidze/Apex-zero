@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk -F',' 'NR>1{print $1\",\"$2}' cars.csv)",
+      "Bash(node tools/check-cars.mjs --csv)",
+      "Bash(npx --yes chromium-cli --help)"
+    ]
+  }
+}

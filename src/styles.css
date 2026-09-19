@@ -1,0 +1,736 @@
+:root {
+  --bg: #070907;
+  --panel: rgba(12, 16, 13, 0.92);
+  --panel-solid: #0c100d;
+  --line: #242c22;
+  --line-hot: #39442f;
+  --lime: #d4fa3c;
+  --orange: #ff5a1f;
+  --red: #ff3b30;
+  --ink: #e9ede8;
+  --dim: #6f7a6d;
+  --dimmer: #414a40;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; margin: 0; }
+/* A phone's 100% includes the space under the collapsing URL bar; dvh does
+   not, so the footer stays on screen. */
+@supports (height: 100dvh) {
+  html, body, #root { height: 100dvh; }
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font-family: var(--mono); }
+
+/* ---------------------------------------------------------------- shell -- */
+
+.shell {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 56px 8px 1fr 34px;
+  isolation: isolate;
+}
+
+.grid-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(120, 160, 110, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(120, 160, 110, 0.055) 1px, transparent 1px);
+  background-size: 68px 68px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 40%, transparent 100%);
+}
+
+.corner {
+  position: absolute;
+  z-index: 6;
+  color: var(--dimmer);
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1;
+  pointer-events: none;
+}
+.corner.tl { top: 74px; left: 14px; }
+.corner.tr { top: 74px; right: 14px; }
+.corner.bl { bottom: 40px; left: 14px; }
+.corner.br { bottom: 40px; right: 14px; }
+
+/* --------------------------------------------------------------- header -- */
+
+.top {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 18px;
+  padding: 0 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 900;
+  font-size: 19px;
+  letter-spacing: 0.02em;
+}
+
+.brand .slash {
+  background: var(--lime);
+  color: #0a0d08;
+  padding: 1px 5px;
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  transform: skewX(-12deg);
+}
+
+.brand small {
+  margin-left: 8px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: var(--dim);
+}
+
+.steps { display: flex; gap: 3px; }
+
+.step-chip {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  padding: 4px 9px;
+  border: 1px solid var(--line);
+  background: #0c0f0c;
+  color: var(--dimmer);
+  cursor: default;
+}
+
+.step-chip.done { color: var(--dim); border-color: var(--line-hot); }
+.step-chip.now { background: var(--lime); border-color: var(--lime); color: #0a0d08; font-weight: 700; }
+.step-chip.clickable { cursor: pointer; }
+.step-chip.clickable:hover { border-color: var(--lime); color: var(--lime); }
+.step-chip.now.clickable:hover { color: #0a0d08; }
+
+.status {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--dim);
+}
+
+.status .dot {
+  width: 7px; height: 7px;
+  background: var(--lime);
+  display: inline-block;
+  margin-right: 7px;
+}
+.status .dot.alert { background: var(--orange); animation: blink 1s steps(2) infinite; }
+.status .hex { color: var(--dimmer); }
+
+@keyframes blink { 50% { opacity: 0.25; } }
+
+.hazard {
+  position: relative;
+  z-index: 5;
+  border-bottom: 1px solid var(--line);
+  background-image: repeating-linear-gradient(
+    -45deg, var(--lime) 0 9px, transparent 9px 19px
+  );
+  opacity: 0.8;
+}
+.hazard.alert { background-image: repeating-linear-gradient(-45deg, var(--orange) 0 9px, transparent 9px 19px); }
+
+/* --------------------------------------------------------------- footer -- */
+
+.bottom {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 8px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--dim);
+}
+
+.contact {
+  margin-left: auto;
+  color: var(--dimmer);
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.contact:hover { color: var(--lime); }
+
+.bar {
+  flex: 1;
+  display: flex;
+  gap: 3px;
+}
+
+.bar i {
+  flex: 1;
+  height: 7px;
+  background: #171c16;
+  display: block;
+}
+.bar i.on { background: var(--lime); }
+
+/* ---------------------------------------------------------------- stage -- */
+
+/* The phase class here is namespaced: an unprefixed one also matched the
+   .quiz and .results view layouts, which turned the stage into a two-column
+   grid and gave the canvas half the width. */
+.stage-layer {
+  /* Fixed, not absolute: an absolutely positioned grid child resolves against
+     its grid area and ends up one cell wide. The shell fills the viewport, so
+     these insets mean the same thing. */
+  position: fixed;
+  z-index: 1;
+  top: 64px; bottom: 34px; left: 0; right: 0;
+  transition: opacity .5s ease, transform .5s ease;
+}
+
+.stage-layer canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+.stage-layer canvas:active { cursor: grabbing; }
+
+/* The box is constant on every screen; the blob is moved inside it instead. */
+/* Faded so the panels read over them, but only so far: the volume is the
+   point of the page and it has to stay legible on every screen. */
+.stage-layer.stage-scoring { opacity: 0.6; }
+.stage-layer.stage-results { opacity: 0.55; }
+
+/* ---------------------------------------------------------------- views -- */
+
+.view {
+  position: relative;
+  z-index: 3;
+  min-height: 0;
+  padding: 26px 26px 0;
+  overflow: hidden;
+}
+
+.view-scroll { height: 100%; overflow-y: auto; scrollbar-width: thin; }
+
+/* ---------------------------------------------------------------- intro -- */
+
+.intro { max-width: 560px; }
+
+.kicker {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin-bottom: 22px;
+  width: fit-content;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+}
+
+.kicker b { background: var(--lime); color: #0a0d08; padding: 4px 8px; }
+.kicker span { border: 1px solid var(--line); border-left: none; padding: 4px 10px; color: var(--dim); }
+
+.mega {
+  margin: 0;
+  font-size: clamp(44px, 7.2vw, 96px);
+  font-weight: 900;
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  /* Scanlines cut through the type, as in the protocol sheet. */
+  background-image: repeating-linear-gradient(
+    to bottom, var(--ink) 0 3px, rgba(0, 0, 0, 0.5) 3px 5px
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mega .hot {
+  background-image: repeating-linear-gradient(
+    to bottom, var(--lime) 0 3px, rgba(0, 0, 0, 0.5) 3px 5px
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.rule-dash {
+  height: 1px;
+  margin: 26px 0 18px;
+  width: 320px;
+  background-image: repeating-linear-gradient(to right, var(--line-hot) 0 6px, transparent 6px 12px);
+}
+
+.lede { color: #9aa398; font-size: 14.5px; line-height: 1.62; max-width: 470px; margin: 0; }
+
+.intro-foot {
+  position: absolute;
+  left: 26px;
+  bottom: 34px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* -------------------------------------------------------------- buttons -- */
+
+.btn {
+  border: 1px solid var(--lime);
+  background: var(--lime);
+  color: #0a0d08;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  padding: 15px 26px;
+  cursor: pointer;
+  position: relative;
+  transition: filter .15s;
+  background-image: repeating-linear-gradient(to bottom, rgba(0,0,0,.12) 0 2px, transparent 2px 4px);
+}
+.btn:hover { filter: brightness(1.12); }
+
+.btn.ghost {
+  background: transparent;
+  background-image: none;
+  border-color: var(--line-hot);
+  color: var(--dim);
+}
+.btn.ghost:hover { border-color: var(--lime); color: var(--lime); filter: none; }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn.sm { padding: 10px 18px; font-size: 11px; }
+
+/* --------------------------------------------------------------- panels -- */
+
+.pane {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  backdrop-filter: blur(3px);
+  position: relative;
+}
+
+.pane-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 14px 0;
+}
+
+.tagline {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--dim);
+}
+
+.tag-lime { background: var(--lime); color: #0a0d08; padding: 3px 7px; font-weight: 700; }
+.tag-box { border: 1px solid var(--line); padding: 3px 7px; color: var(--dim); }
+
+.ghost-num {
+  position: absolute;
+  top: 4px;
+  right: 16px;
+  font-size: 62px;
+  font-weight: 900;
+  line-height: 1;
+  color: #ffffff;
+  opacity: 0.045;
+  letter-spacing: -0.04em;
+  pointer-events: none;
+}
+
+/* ----------------------------------------------------------------- quiz -- */
+
+.quiz {
+  display: grid;
+  grid-template-columns: minmax(340px, 26vw) 1fr minmax(280px, 23vw);
+  gap: 20px;
+  height: 100%;
+  align-items: start;
+}
+
+.quiz-side { grid-column: 1; }
+.quiz-read { grid-column: 3; }
+
+.q-body { padding: 12px 16px 18px; }
+
+.q-title {
+  margin: 10px 0 8px;
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.q-sub { margin: 0 0 16px; color: #8e978c; font-size: 12.5px; line-height: 1.55; }
+
+.q-gap { height: 8px; }
+
+.q-na {
+  margin: 10px 0 0;
+  padding: 9px 11px;
+  border: 1px dashed var(--line);
+  color: var(--dim);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.opts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+.opts.two { grid-template-columns: 1fr 1fr; }
+
+.opt {
+  position: relative;
+  border: 1px solid var(--line);
+  background: #0b0e0a;
+  padding: 11px 10px 9px;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ink);
+  transition: border-color .12s, background .12s;
+}
+
+.opt:hover { border-color: var(--line-hot); background: #0e120c; }
+
+.opt .idx {
+  position: absolute;
+  top: 5px; right: 7px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--dimmer);
+}
+
+.opt .box {
+  display: inline-block;
+  width: 9px; height: 9px;
+  border: 1px solid var(--dim);
+  margin-right: 7px;
+  vertical-align: middle;
+}
+
+.opt .name { font-size: 13px; font-weight: 700; vertical-align: middle; }
+.opt .hint { display: block; margin-top: 4px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; color: var(--dimmer); text-transform: uppercase; }
+
+.opt.on { border-color: var(--lime); background: var(--lime); color: #0a0d08; }
+.opt.on .box { background: #0a0d08; border-color: #0a0d08; }
+.opt.on .hint { color: rgba(10, 13, 8, 0.66); }
+.opt.on .idx { color: rgba(10, 13, 8, 0.5); }
+
+/* meters */
+
+.meter-block { margin-top: 18px; }
+
+.meter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--dim);
+  margin-bottom: 8px;
+}
+
+.meter-val { font-family: var(--sans); font-size: 26px; font-weight: 900; color: var(--lime); letter-spacing: -0.02em; }
+
+.meter-wrap { position: relative; }
+
+.cells { display: flex; gap: 3px; pointer-events: none; }
+.cells i { flex: 1; height: 13px; background: #171c16; }
+.cells i.on { background: var(--lime); }
+
+.meter-wrap input[type="range"] {
+  position: absolute;
+  inset: -4px 0;
+  width: 100%;
+  opacity: 0;
+  cursor: ew-resize;
+  margin: 0;
+}
+
+.meter-foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 7px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--dimmer);
+  text-transform: uppercase;
+}
+
+/* readout */
+
+.rows { padding: 12px 14px 14px; }
+
+.rrow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(36, 44, 34, 0.55);
+  font-size: 12.5px;
+}
+.rrow:last-child { border-bottom: none; }
+
+.rrow .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--dim); text-transform: uppercase; padding-top: 2px; }
+.rrow .v { font-weight: 700; text-align: right; }
+.rrow .v.hot { color: var(--lime); font-family: var(--mono); font-weight: 500; }
+
+.note {
+  margin: 4px 14px 14px;
+  border: 1px solid #52231c;
+  background: rgba(60, 16, 10, 0.25);
+  padding: 9px 11px;
+}
+
+.note h4 { margin: 0 0 5px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--orange); text-transform: uppercase; font-weight: 500; }
+.note p { margin: 0; font-size: 12px; line-height: 1.5; color: #b9c0b6; }
+
+.decisive {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 9px 11px;
+  text-align: left;
+  border: 1px dashed var(--line-hot);
+  background: transparent;
+  color: var(--dim);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+}
+
+.decisive:hover { border-color: var(--lime); color: var(--lime); }
+
+.decisive.on {
+  border: 1px solid var(--lime);
+  background: var(--lime);
+  color: #0a0d08;
+  font-weight: 700;
+}
+
+.q-nav { display: flex; gap: 8px; margin-top: 18px; }
+
+/* -------------------------------------------------------------- scoring -- */
+
+.scoring { display: grid; place-items: center; height: 100%; }
+
+.scoring .pane { width: min(560px, 90%); padding: 20px 22px 22px; }
+
+.scoring-top { display: flex; justify-content: space-between; align-items: flex-start; }
+
+.scoring-top .label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: var(--dim); text-transform: uppercase; }
+
+.scoring-pct { font-size: 56px; font-weight: 900; color: var(--lime); line-height: 0.85; letter-spacing: -0.04em; }
+
+.checks { margin-top: 18px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; }
+
+.checks div { display: flex; justify-content: space-between; padding: 3px 0; color: var(--dimmer); text-transform: uppercase; }
+.checks div.live { color: var(--ink); }
+.checks div.ok { color: var(--dim); }
+.checks div.ok span { color: var(--lime); }
+
+.scoring-foot { display: flex; gap: 4px; justify-content: center; margin-top: 20px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; }
+
+.scoring-foot b { background: var(--orange); color: #140602; padding: 4px 9px; font-weight: 700; }
+
+/* -------------------------------------------------------------- results -- */
+
+.results {
+  display: grid;
+  grid-template-columns: minmax(420px, 1fr) minmax(400px, 34vw);
+  gap: 24px;
+  align-items: start;
+  padding-bottom: 30px;
+}
+
+.best-name {
+  margin: 12px 0 8px;
+  font-size: clamp(34px, 5vw, 62px);
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  background-image: repeating-linear-gradient(to bottom, currentColor 0 3px, rgba(0,0,0,.45) 3px 5px);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--ink);
+}
+
+.spec-line {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.best-blurb { margin: 14px 0 12px; font-size: 14px; line-height: 1.6; color: #b9c0b6; max-width: 60ch; }
+
+.pill-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 18px; }
+
+.pill {
+  border: 1px solid var(--line);
+  padding: 4px 9px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+.pill.ok { border-color: #3c5a1c; color: var(--lime); }
+
+.recap { max-width: 520px; }
+.recap .rows { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
+
+.alt-card {
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--line-hot);
+  background: #0a0d0a;
+  padding: 11px 13px;
+  margin-bottom: 7px;
+}
+
+.alt-head { display: flex; align-items: baseline; gap: 9px; }
+.alt-head .n { font-family: var(--mono); font-size: 10px; color: var(--dimmer); }
+.alt-head h3 { margin: 0; font-size: 17px; font-weight: 800; letter-spacing: -0.01em; text-transform: uppercase; flex: 1; }
+.alt-head .score { font-family: var(--mono); font-size: 19px; font-weight: 700; color: var(--dim); }
+
+.alt-card.top { border-left-color: var(--lime); }
+.alt-card.top .score { color: var(--lime); }
+
+.alt-spec { margin: 5px 0 0; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--dim); text-transform: uppercase; line-height: 1.5; }
+.alt-price { margin: 4px 0 0; font-family: var(--mono); font-size: 11px; color: var(--lime); }
+.alt-note { margin: 6px 0 0; font-size: 12.5px; color: #aab2a7; line-height: 1.45; }
+.alt-warn { margin: 5px 0 0; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--orange); text-transform: uppercase; }
+
+.fineprint { margin: 10px 0 0; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; color: var(--dimmer); text-transform: uppercase; }
+
+/* The bar and the percentage matter more than the address on a phone. */
+/* ----------------------------------------------------------- responsive -- */
+
+/*
+ * Above this width the stage is a full-bleed backdrop and the panels are kept
+ * to columns that leave it a clear gap. Below it there is no gap to leave, so
+ * the stage stops being a backdrop and becomes a band in a row of its own,
+ * with everything else stacked underneath. The volume is the whole point of
+ * the thing; on a narrow screen the only way to guarantee a panel never covers
+ * it is to give it space nothing else is allowed into.
+ */
+@media (max-width: 1180px) {
+  .shell {
+    --band: clamp(170px, 32vh, 330px);
+    grid-template-rows: 52px 6px var(--band) 1fr 30px;
+  }
+
+  .stage-layer {
+    position: relative;
+    grid-row: 3;
+    top: auto; bottom: auto; left: auto; right: auto;
+    height: 100%;
+    min-height: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Those two were faded because they sat behind panels. Nothing sits on top
+     of the stage any more, so there is nothing to fade for. */
+  .stage-layer.stage-scoring, .stage-layer.stage-results { opacity: 1; }
+
+  .view {
+    grid-row: 4;
+    height: auto;
+    overflow-y: auto;
+    padding: 16px 16px 24px;
+  }
+
+  .top { grid-template-columns: auto 1fr; gap: 10px; padding: 0 14px; }
+  .steps { display: none; }
+  .brand { font-size: 16px; }
+  .brand small { display: none; }
+  .status { font-size: 9.5px; letter-spacing: 0.1em; gap: 8px; }
+
+  .quiz { grid-template-columns: 1fr 1fr; gap: 14px; height: auto; }
+  /* The question column scrolls inside itself on a full-height stage. Here the
+     whole view scrolls instead, so letting it keep height:100% just clipped
+     the options and the buttons off the bottom of the panel. */
+  .quiz-side.view-scroll { height: auto; overflow: visible; }
+  .quiz-side { grid-column: 1; }
+  .quiz-read { grid-column: 2; align-self: start; }
+
+  .results { grid-template-columns: 1fr; gap: 16px; padding-bottom: 8px; }
+
+  .intro { max-width: none; }
+  .intro-foot { position: static; margin-top: 24px; flex-wrap: wrap; }
+  .rule-dash { width: 220px; margin: 18px 0 14px; }
+  .lede { font-size: 13.5px; max-width: 60ch; }
+
+  .scoring { height: auto; padding-top: 8px; }
+  .scoring .pane { width: 100%; }
+}
+
+/* No room for the address next to the progress bar. */
+@media (max-width: 860px) {
+  .contact { display: none; }
+}
+
+/* Phone: one column for everything, and the chrome gets out of the way. */
+@media (max-width: 720px) {
+  .shell { --band: clamp(150px, 27vh, 260px); }
+
+  .quiz { grid-template-columns: 1fr; }
+  .quiz-side, .quiz-read { grid-column: 1; }
+
+  .opts { grid-template-columns: 1fr 1fr; }
+  .opts.two { grid-template-columns: 1fr 1fr; }
+
+  .view { padding: 13px 12px 22px; }
+  .corner { display: none; }
+
+  .q-title { font-size: 21px; }
+  .q-body { padding: 10px 13px 15px; }
+  .btn { padding: 13px 18px; letter-spacing: 0.12em; }
+  .btn.sm { padding: 10px 14px; }
+
+  .mega { line-height: 0.9; }
+  .kicker { margin-bottom: 16px; }
+  .intro-foot { gap: 10px; }
+
+  .scoring-pct { font-size: 40px; }
+  .scoring-foot { flex-wrap: wrap; }
+
+  .bottom { padding: 0 12px 6px; gap: 8px; font-size: 9px; }
+  .best-blurb { font-size: 13px; }
+}
+
+/* Anything narrower than a small phone: stop the option grid squashing. */
+@media (max-width: 400px) {
+  .opts, .opts.two { grid-template-columns: 1fr; }
+  .recap .rows { grid-template-columns: 1fr; }
+}
