@@ -289,13 +289,25 @@ button { font-family: var(--mono); }
 
 .lede { color: #9aa398; font-size: 14.5px; line-height: 1.62; max-width: 470px; margin: 0; }
 
+/* The footer used to be pinned with position:absolute so it always sat on
+   the same baseline as the stage controls. On short viewports the lede text
+   ran long enough to reach that fixed line and the footer sat on top of it.
+   Flex column + margin-top:auto keeps it pinned to the bottom when there is
+   room, but lets it fall into normal flow below the text once there isn't. */
+.view-intro {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
 .intro-foot {
-  position: absolute;
-  left: 26px;
-  bottom: 34px;
   display: flex;
   align-items: center;
   gap: 14px;
+  margin-top: auto;
+  padding: 34px 0;
+  flex-shrink: 0;
 }
 
 /* -------------------------------------------------------------- buttons -- */
@@ -687,7 +699,7 @@ button { font-family: var(--mono); }
   .results { grid-template-columns: 1fr; gap: 16px; padding-bottom: 8px; }
 
   .intro { max-width: none; }
-  .intro-foot { position: static; margin-top: 24px; flex-wrap: wrap; }
+  .intro-foot { margin-top: 24px; padding: 0; flex-wrap: wrap; }
   .rule-dash { width: 220px; margin: 18px 0 14px; }
   .lede { font-size: 13.5px; max-width: 60ch; }
 

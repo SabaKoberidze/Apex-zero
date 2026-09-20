@@ -1,6 +1,6 @@
 export function Intro({ count, onStart }: { count: number; onStart: () => void }) {
   return (
-    <div className="view">
+    <div className="view view-intro">
       <div className="intro">
         <div className="kicker">
           <b>11 QUESTIONS</b>
