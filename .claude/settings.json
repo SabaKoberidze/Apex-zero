@@ -4,7 +4,12 @@
       "Bash(awk -F',' 'NR>1{print $1\",\"$2}' cars.csv)",
       "Bash(node tools/check-cars.mjs --csv)",
       "Bash(npx --yes chromium-cli --help)",
-      "Bash(node tools/check-cars.mjs)"
+      "Bash(node tools/check-cars.mjs)",
+      "Bash(node -e \"require.resolve\\('playwright'\\)\")",
+      "Bash(node shot.js)",
+      "Bash(node shot2.js)",
+      "Bash(lsof -ti:5174 -sTCP:LISTEN)",
+      "Bash(xargs -r kill)"
     ]
   }
 }
